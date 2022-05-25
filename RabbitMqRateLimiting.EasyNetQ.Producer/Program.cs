@@ -13,8 +13,13 @@ string queueName;
 
 while ((queueName = Console.ReadLine()!) != string.Empty)
 {
-    var queue = await bus.Advanced.QueueDeclareAsync("Messages_" + queueName);
+    var queue = await bus.Advanced.QueueDeclareAsync(
+        "Messages_" + queueName,
+        x => x.WithArgument("x-single-active-consumer", true));
+
     await bus.Advanced.BindAsync(exchange, queue, queueName, CancellationToken.None);
+
+    Console.WriteLine("Messages_" + queueName);
 
     for (int i = 0; i < 15; i++)
     {

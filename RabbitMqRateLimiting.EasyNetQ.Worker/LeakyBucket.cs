@@ -65,7 +65,7 @@ class LeakyBucket<T> : IAsyncDisposable
 
         while (!ct.IsCancellationRequested)
         {
-            for (int i = 0; i < _currentItems.Count && i < _remaining && !ct.IsCancellationRequested; i++)
+            while (_currentItems.Count > 0 && _remaining > 0 && !ct.IsCancellationRequested)
             {
                 var hasItem = _currentItems.TryDequeue(out var dequeueItem);
                 if (hasItem)
